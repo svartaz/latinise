@@ -1,5 +1,6 @@
 import pinyin from 'pinyin';
-import { replaceAll, zip } from '../util';
+import { replaceAll } from '../util';
+const Qieyun = require('qieyun');
 
 const splitTone = (pinyin: string): [string, number] => {
   pinyin = pinyin.normalize('NFD');
@@ -16,8 +17,10 @@ const splitTone = (pinyin: string): [string, number] => {
   return [pinyin.normalize('NFC'), tone];
 }
 
-const convertAtone = (atone: string) =>
-  replaceAll(atone, [
+const convertHans = (hans, pinyin) => {
+  let [atone, tone] = splitTone(pinyin);
+
+  atone = replaceAll(atone, [
     [/(?<=^[jqx])u/, 'ü'],
     [/^j/, 'g'],
     [/^q/, 'k'],
@@ -46,22 +49,56 @@ const convertAtone = (atone: string) =>
     [/iog/, 'yg'],
     [/og/, 'ug'],
     [/o/, 'e'],
+
     [/(?<=[iyu])e(?=[iugn])/, ''],
   ])
 
-const convertPinyin = (pinyin: string): string => {
-  const [atone, tone] = splitTone(pinyin);
-  return convertAtone(atone)
-    .replace(/(?<=[ưea])|(?<=[iuy])(?![iuyea])/, ["\u0304", "\u0301", "\u0309", "\u0300", ""][tone])
-    .normalize("NFC")
-};
+  const data = Qieyun.資料.query字頭(hans);
+  if (0 < data.length) {
+    if (data.every(it => it.音韻地位.母 == '疑'))
+      atone = replaceAll(atone, [
+        [/^(?=[iyuae])/, 'g'],
+      ])
+    else if (data.every(it => '精清從心邪'.includes(it.音韻地位.母))) {
+      atone = replaceAll(atone, [
+        [/^k(?=[iy])/, 'ţ'],
+        [/^c(?=[iy])/, 'z'],
+        [/^x(?=[iy])/, 's'],
+      ])
+    }
 
-export const convertText = (text: string): [{ raw: string } | { hans: string, latns: [string] }] =>
+    if (data.every(it => it.音韻地位.聲 == '入' && '唐陽江登蒸庚耕庚清青東冬鍾'.includes(it.音韻地位.韻)))
+      atone = replaceAll(atone, [
+        [/(?<=[iyuea])$/, 'k'],
+      ])
+    else if (data.every(it => it.音韻地位.聲 == '入' && '寒桓刪山仙元先痕魂臻眞諄欣文'.includes(it.音韻地位.韻)))
+      atone = replaceAll(atone, [
+        [/(?<=[iyuea])$/, 't'],
+      ])
+
+    else if (data.every(it => it.音韻地位.聲 == '入' && '覃談咸銜鹽嚴凡添侵'.includes(it.音韻地位.韻)))
+      atone = replaceAll(atone, [
+        [/(?<=[iyuea])$/, 'p'],
+      ])
+
+    if (data.every(it => '覃談咸銜鹽嚴凡添侵'.includes(it.音韻地位.韻)))
+      atone = replaceAll(atone, [
+        [/n$/, 'm'],
+      ])
+  }
+  console.log(Qieyun.資料.query字頭('律'))
+
+  return atone
+    .replace(/(?<=[ưea])|(?<=[iuy])(?![iuyea])/, ["\u0304", "\u0301", "\u0309", "\u0300", ""][tone])
+    .normalize("NFC");
+}
+
+export const convert = (text: string): [{ raw: string } | { hans: string, latns: [string] }] =>
   // @ts-ignore
   text
     .split(/(?<=\p{sc=Han})|(?=\p{sc=Han})/ug)
     .map(chunk =>
       chunk.match(/^\p{sc=Han}$/u)
-        ? { hans: chunk, latns: pinyin(chunk, { heteronym: true, segment: "segmentit" })[0].map(convertPinyin) }
+        ? { hans: chunk, latns: pinyin(chunk, { heteronym: true, segment: "segmentit" })[0].map(it => convertHans(chunk, it)) }
         : { raw: chunk }
     )

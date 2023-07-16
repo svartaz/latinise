@@ -8,6 +8,7 @@
   "dependencies": {
     "next": "^13.4.10",
     "pinyin": "^3.0.0-alpha.5",
+    "qieyun-examples": "^20230224.0.0",
     "sass": "^1.63.6",
     "to-jyutping": "^1.0.0"
   },

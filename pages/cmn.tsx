@@ -1,4 +1,4 @@
-import { convertText } from '../libs/convert/cmn'
+import { convert } from '../libs/convert/cmn'
 import { useState } from 'react'
 
 export default ({ props }) => {
@@ -9,7 +9,7 @@ export default ({ props }) => {
     <textarea lang='zh-cmn-Hant' value={value} onChange={event => setValue(event.target.value)}></textarea>
     <div className='zh' style={{ fontSize: '300%' }} lang='zh-cmn-Hant'>
       {
-        convertText(value).map(datum =>
+        convert(value).map(datum =>
           'raw' in datum ? datum.raw : <ruby>{datum.hans}<rt style={{ whiteSpace: 'pre-line' }}>{datum.latns.join('\n')}</rt></ruby>
         )
       }
