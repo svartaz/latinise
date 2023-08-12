@@ -109,6 +109,11 @@ const convertJyutping = (hans, jyutping) => {
         [/^ḑ(?=[iyueơăoa])/, 'dj'],
         [/(?<=^[sz])(?=[iyueơăoa])/, 'j'],
       ])
+    else if (data.every(it => '見溪群曉匣云'.includes(it.音韻地位.母)))
+      atone = replaceAll(atone, [
+        [/^f/, 'xw'],
+        [/^v/, 'hw'],
+      ])
   }
 
   return atone

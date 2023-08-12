@@ -5,7 +5,7 @@ export default ({ props }) => {
   const [value, setValue] = useState('人人生而平等，喺尊嚴同埋權利上一律平等。佢哋有理性同埋良心，而且應當以兄弟關係嘅精神相對待。')
 
   return <>
-    <h2>yue</h2>
+    <h2>YUE cantonese</h2>
     <textarea lang='zh-yue' value={value} onChange={event => setValue(event.target.value)}></textarea>
     <div className='zh' lang='zh-yue' style={{ fontSize: '300%' }}>
       {

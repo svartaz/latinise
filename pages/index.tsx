@@ -11,5 +11,6 @@ export default ({ props }) => <>
     <li><Link href='pol'>pol</Link></li>
     <li><Link href='kor'>kor</Link></li>
     <li><Link href='heb'>heb</Link></li>
+    <li><Link href='san'>san</Link></li>
   </ul>
 </>
