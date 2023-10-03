@@ -3,8 +3,47 @@
 body
   font-family: 'Noto Serif', 'Noto Serif Traditional Chinese', serif
 
+#__next
+  display: flex
+  flex-direction: column
+  gap: 1em
+  align-items: center
+
 textarea
+  resize: none
+  outline: none
   font: inherit
+  width: 80%
+
+.output
+  font-size: 300%
+  width: 80%
 
 .zh
   line-height: 2
+
+table
+  border-collapse: collapse
+
+  tbody th
+    text-align: right
+
+  th, td
+    padding-left: 0.5em
+    padding-right: 0.5em
+    padding-top: 0.25em
+    padding-bottom: 0.25em
+
+  thead th:not(:first-child), td
+    border-left: 1px solid
+    border-right: 1px solid
+
+  th
+    text-align: center
+
+  td[colspan]
+    text-align: center
+  td[colspan]:not(:first-child)
+    border-left: 1px solid
+  td[colspan]:not(:last-child)
+    border-right: 1px solid
