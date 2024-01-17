@@ -7,8 +7,8 @@ export const BasicConverter = (title: string, lang: string, re: RegExp, convertW
 
   return <>
     <h2>{title}</h2>
-    <textarea lang={lang} value={value} onChange={event => setValue(event.target.value)}></textarea>
-    <div lang={lang} className='output'>
+    <textarea lang={lang} dir={['ar', 'he'].includes(lang) ? 'rtl' : 'ltr'} value={value} onChange={event => setValue(event.target.value)}></textarea>
+    <div className='output'>
       {convert(value)}
     </div>
   </>
