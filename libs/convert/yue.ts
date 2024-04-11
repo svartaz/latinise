@@ -3,16 +3,16 @@ import { replaceAll } from "../util";
 const Qieyun = require('qieyun');
 
 const convertJyutping = (hans, jyutping) => {
-  let [atone, toneStr] = jyutping.split(/(?<=[a-z]+)(?=[1-6])/);
-  const isLow = ['4', '5', '6'].includes(toneStr)
-  const tone =
+  let [atone, toneStr]: [string, string] = jyutping.split(/(?<=[a-z]+)(?=[1-6])/);
+  const isLow: boolean = ['4', '5', '6'].includes(toneStr)
+  const tone: number =
     atone.match(/[ktp]$/)
       ? 3
       : (parseInt(toneStr) - 1) % 3
 
   atone = replaceAll(atone, [
-    [/(?<=[aeiou])i/, 'j'],
-    [/(?<=[aeiou])u/, 'w'],
+    [/(?<=[aeiou])i$/, 'j'],
+    [/(?<=[aeiou])u$/, 'w'],
 
     [/aa/, 'ā'],
     [/a/, 'ă'],
@@ -69,57 +69,55 @@ const convertJyutping = (hans, jyutping) => {
   ])
 
   const data = Qieyun.資料.query字頭(hans);
-  if (0 < data.length) {
+  if (1 <= data.length) {
     if (data.every(it => '模虞魚'.includes(it.音韻地位.韻)))
-      atone = replaceAll(atone, [
-        [/(?<=[pb][xh]?|m)ow$/, 'u'],
-      ])
-    if (data.every(it => '虞魚'.includes(it.音韻地位.韻)))
-      atone = replaceAll(atone, [
-        [/ơj$/, 'y'],
-      ])
-    if (data.every(it => '灰'.includes(it.音韻地位.韻)))
-      atone = replaceAll(atone, [
-        [/(?<=[tdţḑ][xh]?|[szl])ơj$/, 'uj'],
-      ])
-    if (data.every(it => '覃談'.includes(it.音韻地位.韻)))
-      atone = replaceAll(atone, [
-        [/ă(?=[mp]$)/, 'o'],
-      ])
+      atone = atone.replaceAll(/(?<=[pb][xh]?|m)ow$/, 'u');
 
+    if (data.every(it => '虞魚'.includes(it.音韻地位.韻)))
+      atone = atone.replace(/ơj$/, 'y');
+
+    if (data.every(it => '灰'.includes(it.音韻地位.韻)))
+      atone = atone.replace(/(?<=[tdţḑ][xh]?|[szl])ơj$/, 'uj');
+
+    if (data.every(it => '覃談'.includes(it.音韻地位.韻)))
+      atone = atone.replace(/ă(?=[mp]$)/, 'o');
 
     if (data.every(it => it.音韻地位.母 == '疑'))
-      atone = replaceAll(atone, [
-        [/(?<=^q?)(?=[jwiyueơăoa])/, 'g'],
-      ])
+      atone = atone.replace(/(?<=^q?)(?=[jwiyueơăoa])/, 'g');
+
     else if (data.every(it => '云匣'.includes(it.音韻地位.母)))
-      atone = replaceAll(atone, [
-        [/^(?=[jwiyueơăoa])/, 'h'],
-      ])
+      atone = atone.replace(/^(?=[jwiyueơăoa])/, 'h');
+
     else if (data.every(it => '日娘'.includes(it.音韻地位.母)))
       atone = replaceAll(atone, [
         [/(?<=^q?)(?=j)/, 'n'],
         [/(?<=^q?)(?=[iyeơ])/, 'nj'],
-      ])
+      ]);
+
     else if (data.every(it => '知徹澄莊初崇生俟章昌常書船'.includes(it.音韻地位.母)))
       atone = replaceAll(atone, [
-        [/^ţx(?=[iyueơăoa])/, 'txj'],
-        [/^ţ(?=[iyueơăoa])/, 'tj'],
-        [/^ḑh(?=[iyueơăoa])/, 'dhj'],
-        [/^ḑ(?=[iyueơăoa])/, 'dj'],
+        [/^ţ(x?)(?=[iyueơăoa])/, 't$1j'],
+        [/^ḑ([xh]?)(?=[iyueơăoa])/, 'd$1j'],
         [/(?<=^[sz])(?=[iyueơăoa])/, 'j'],
-      ])
+      ]);
+
     else if (data.every(it => '見溪群曉匣云'.includes(it.音韻地位.母)))
       atone = replaceAll(atone, [
         [/^f/, 'xw'],
         [/^v/, 'hw'],
-      ])
+      ]);
   }
 
-  return atone
-    .replace(/(?<=[iyueơăoa])/, ['', '\u0301', '\u0309', ''][tone])
-    .replace(/(?<=^[gm])$/, ['', '\u0301', '\u0307', ''][tone])
-    .normalize('NFKC')
+  return replaceAll(atone, [
+    [/^kx/, 'ꝁ'],
+    [/^ţx/, 'ṯ'],
+    [/^tx/, 'ŧ'],
+    [/^px/, 'ꝑ'],
+    //[/$/, ['', 'q', 's', ''][tone]],
+    [/(?<=[iyueơăoa])/, ['', '\u0301', '\u0323', ''][tone]],
+    [/(?<=^[gm])$/, ['', '\u0301', '\u0323', ''][tone]],
+  ])
+    .normalize('NFKC');
 }
 
 export const convert = (text: string) =>
