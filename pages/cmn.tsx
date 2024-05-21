@@ -10,7 +10,7 @@ export default () => {
     <div className='zh output' lang='zh-cmn-Hant'>
       {
         convert(value).map(datum =>
-          'raw' in datum ? datum.raw : <ruby>{datum.hans}<rt style={{ whiteSpace: 'pre-line' }}>{datum.latns.join('\n')}</rt></ruby>
+          'raw' in datum ? datum.raw : <ruby>{datum.hans}<rt style={{ whiteSpace: 'pre-line' }}>{datum.latns.reverse().join('\n')}</rt></ruby>
         )
       }
     </div >

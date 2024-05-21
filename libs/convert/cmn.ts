@@ -24,24 +24,22 @@ const convertHans = (hans, pinyin) => {
     [/(?<=^[jqx])u/, 'ü'],
     [/^j/, 'g'],
     [/^q/, 'k'],
-    [/^h/, 'x'],
+    [/^x/, 'h'],
 
     [/(?<=^[bpmf])o$/, 'uo'],
 
-    [/^zh/, 'ď'],
+    [/^zh/, 'ž'],
     [/^ch/, 'ť'],
     [/^sh/, 'š'],
-    [/^c/, 'ţ'],
-    [/(?<=^[ďťšrzţs])i/, 'ư'],
+    [/^c/, 'q'],
+    [/(?<=^[žťšrzqs])i/, 'ư'],
 
     [/^g/, 'c'],
     [/ng$/, 'g'],
 
-    [/^yi/, 'i'],
-    [/^wu/, 'u'],
     [/^yu/, 'ü'],
-    [/^y/, 'i'],
-    [/^w/, 'u'],
+    [/^yi?/, 'i'],
+    [/^wu?/, 'u'],
 
     [/ü/, 'y'],
 
@@ -61,9 +59,9 @@ const convertHans = (hans, pinyin) => {
       ])
     else if (data.every(it => '精清從心邪'.includes(it.音韻地位.母))) {
       atone = replaceAll(atone, [
-        [/^k(?=[iy])/, 'ţ'],
+        [/^k(?=[iy])/, 'q'],
         [/^c(?=[iy])/, 'z'],
-        [/^x(?=[iy])/, 's'],
+        [/^h(?=[iy])/, 's'],
       ])
     }
 
@@ -75,7 +73,6 @@ const convertHans = (hans, pinyin) => {
       atone = replaceAll(atone, [
         [/(?<=[iyuea])$/, 't'],
       ])
-
     else if (data.every(it => it.音韻地位.聲 == '入' && '覃談咸銜鹽嚴凡添侵'.includes(it.音韻地位.韻)))
       atone = replaceAll(atone, [
         [/(?<=[iyuea])$/, 'p'],
@@ -86,7 +83,6 @@ const convertHans = (hans, pinyin) => {
         [/n$/, 'm'],
       ])
   }
-  console.log(Qieyun.資料.query字頭('律'))
 
   return atone
     .replace(/(?<=[ưea])|(?<=[iuy])(?![iuyea])/, ["\u0304", "\u0301", "\u0309", "\u0300", ""][tone])

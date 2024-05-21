@@ -6,7 +6,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "^13.4.10",
+    "next": "^14.2.3",
     "pinyin": "^3.0.0-alpha.5",
     "qieyun-examples": "^20230224.0.0",
     "sass": "^1.63.6",

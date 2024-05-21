@@ -17,8 +17,11 @@ export default ({ props }) => <>
       <li><Link href='cmn'>cmn</Link></li>
       <li><Link href='yue'>yue</Link></li>
     </ul>
-    <li><Link href='ara'>ara</Link></li>
-    <li><Link href='heb'>heb</Link></li>
+    <li>semitic</li>
+    <ul>
+      <li><Link href='ara'>ara</Link></li>
+      <li><Link href='heb'>heb</Link></li>
+    </ul>
     <li><Link href='ind'>ind</Link></li>
     <li><Link href='kor'>kor</Link></li>
   </ul>
