@@ -4,15 +4,15 @@ export const san = word =>
   replaceAll(word, [
     [/क/g, 'q<CON>'],
     [/ख/g, 'ꝗ<CON>'],
-    [/ग/g, 'c<CON>'],
-    [/घ/g, 'ꞓ<CON>'],
-    [/ङ/g, 'g<CON>'],
+    [/ग/g, 'g<CON>'],
+    [/घ/g, 'ǥ<CON>'],
+    [/ङ/g, 'n<CON>'],
     [/ह/g, 'h<CON>'],
 
     [/च/g, 'k<CON>'],
     [/छ/g, 'ꝁ<CON>'],
-    [/ज/g, 'j<CON>'],
-    [/झ/g, 'ɉ<CON>'],
+    [/ज/g, 'c<CON>'],
+    [/झ/g, 'ꞓ<CON>'],
     [/ञ/g, 'n<CON>'],
     [/य/g, 'i<CON>'],
     [/श/g, 'x<CON>'],
@@ -77,7 +77,6 @@ export const san = word =>
 
     [/<CON><VOW>/g, ''],
     [/<CON>/g, 'a'],
-
 
     [/ऽ/g, '\''],
     [/।/g, '.'],
